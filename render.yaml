@@ -1,8 +1,16 @@
 services:
   - type: web
     name: books-toscrap-flask-app
-    repo: https://github.com/Deepak8260/Books-To-Scrape-Flask-App
-    branch: main
-    buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
     env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: "gunicorn app:app"
+
+
+services:
+  - type: web
+    name: flask-portfolio
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
