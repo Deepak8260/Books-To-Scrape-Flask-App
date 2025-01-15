@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #f0f2f5, #d9e2ec);
+    background: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    background-color: #f4f4f9;
     color: #333;
     margin: 0;
     padding: 20px;
@@ -17,12 +18,39 @@ form {
     margin-bottom: 20px;
 }
 
-select, button {
+select {
     padding: 10px;
     margin: 5px;
     border-radius: 5px;
     border: 1px solid #ddd;
     font-size: 1em;
+    background-color: #fff;
+    color: #2c3e50;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+    cursor: pointer;
+}
+
+select:hover {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(44, 62, 80, 0.5);
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1em;
+    background-color: #2c3e50;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #1a252f;
+    transform: translateY(-2px);
 }
 
 .subheading {
