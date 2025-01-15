@@ -1,40 +1,97 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests
 from bs4 import BeautifulSoup as bs
 
 app = Flask(__name__)
 
-@app.route('/')
+# List of categories with their corresponding IDs
+categories = {
+    "Travel": "travel_2",
+    "Mystery": "mystery_3",
+    "Historical Fiction": "historical-fiction_4",
+    "Sequential Art": "sequential-art_5",
+    "Classics": "classics_6",
+    "Philosophy": "philosophy_7",
+    "Romance": "romance_8",
+    "Womens Fiction": "womens-fiction_9",
+    "Fiction": "fiction_10",
+    "Childrens": "childrens_11",
+    "Religion": "religion_12",
+    "Nonfiction": "nonfiction_13",
+    "Music": "music_14",
+    "Default": "default_15",
+    "Science Fiction": "science-fiction_16",
+    "Sports and Games": "sports-and-games_17",
+    "Fantasy": "fantasy_18",
+    "New Adult": "new-adult_19",
+    "Young Adult": "young-adult_20",
+    "Science": "science_21",
+    "Poetry": "poetry_22",
+    "Paranormal": "paranormal_23",
+    "Art": "art_24",
+    "Psychology": "psychology_25",
+    "Autobiography": "autobiography_26",
+    "Parenting": "parenting_27",
+    "Adult Fiction": "adult-fiction_28",
+    "Humor": "humor_29",
+    "Horror": "horror_30",
+    "History": "history_31",
+    "Food and Drink": "food-and-drink_32",
+    "Christian Fiction": "christian-fiction_33",
+    "Business": "business_34",
+    "Biography": "biography_35",
+    "Thriller": "thriller_36",
+    "Contemporary": "contemporary_37",
+    "Spirituality": "spirituality_38",
+    "Academic": "academic_39",
+    "Self Help": "self-help_40",
+    "Historical": "historical_41",
+    "Christian": "christian_42",
+    "Suspense": "suspense_43",
+    "Short Stories": "short-stories_44",
+    "Novels": "novels_45",
+    "Health": "health_46",
+    "Politics": "politics_47",
+    "Cultural": "cultural_48",
+    "Erotica": "erotica_49",
+    "Crime": "crime_50"
+}
+
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    # Scrape the data
-    x = requests.get('https://books.toscrape.com/catalogue/category/books/music_14/index.html')
-    soup = bs(x.text, 'html.parser')
-    books = soup.find_all('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
+    selected_category = request.form.get('category')
+    all_books = []
 
-    # Extract prices and convert to INR
-    prices = []
-    conversion_rate = 105.29  # Example conversion rate from GBP to INR
-    for i in books:
-        price = i.find_all('p', {'class': 'price_color'})[0].text
-        price = price.replace('Â£', '')
-        prices.append(round(float(price) * conversion_rate, 2))
+    if selected_category:
+        category_url = categories[selected_category]
+        url = f'https://books.toscrape.com/catalogue/category/books/{category_url}/index.html'
+        print(f"Scraping URL: {url}")  # Debugging statement
+        x = requests.get(url)
+        soup = bs(x.text, 'html.parser')
+        books = soup.find_all('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
 
-    # Extract titles
-    titles = [i.h3.a['title'] for i in books]
+        for i in books:
+            # Extract price and convert to INR
+            price = i.find_all('p', {'class': 'price_color'})[0].text
+            price = price.replace('Â£', '')
+            price_inr = round(float(price) * 105.29, 2)
 
-    # Extract ratings
-    num_map = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
-    ratings = [num_map.get(i.article.p['class'][1]) for i in books]
+            # Extract title
+            title = i.h3.a['title']
 
-    # Extract images
-    imgs = []
-    for i in books:
-        l = i.img['src'].replace('../', '')
-        img = 'https://books.toscrape.com/' + l
-        imgs.append(img)
+            # Extract rating
+            num_map = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
+            rating = num_map.get(i.article.p['class'][1])
 
-    # Render the template with data and pass zip function
-    return render_template('books.html', titles=titles, prices=prices, ratings=ratings, imgs=imgs, zip=zip)
+            # Extract image
+            l = i.img['src'].replace('../', '')
+            img = 'https://books.toscrape.com/' + l
+
+            all_books.append((title, price_inr, rating, img))
+
+        print(f"Books found: {len(all_books)}")  # Debugging statement
+
+    return render_template('books.html', books=all_books, categories=categories.keys())
 
 if __name__ == '__main__':
     app.run(debug=True)
