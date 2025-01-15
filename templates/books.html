@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books to Scrape</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Books to Scrape</h1>
+    <form method="POST">
+        <select name="category">
+            {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Search</button>
+    </form>
+    <div class="book-container">
+        {% for title, price, rating, img in books %}
+        <div class="book">
+            <img src="{{ img }}" alt="{{ title }}">
+            <h2>{{ title }}</h2>
+            <p>Price: ₹{{ price }}</p>
+            <p>Rating: {{ rating }} stars</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
