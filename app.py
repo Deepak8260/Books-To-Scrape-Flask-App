@@ -91,7 +91,7 @@ def home():
 
         print(f"Books found: {len(all_books)}")  # Debugging statement
 
-    return render_template('books.html', books=all_books, categories=categories.keys())
+    return render_template('books.html', books=all_books, categories=categories.keys(), selected_category=selected_category)
 
 if __name__ == '__main__':
     app.run(debug=True)

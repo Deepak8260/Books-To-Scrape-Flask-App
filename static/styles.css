@@ -9,7 +9,6 @@ body {
 h1 {
     text-align: center;
     margin-bottom: 20px;
-    animation: fadeIn 1s ease-in-out;
     color: #2c3e50;
 }
 
@@ -24,6 +23,12 @@ select, button {
     border-radius: 5px;
     border: 1px solid #ddd;
     font-size: 1em;
+}
+
+.subheading {
+    font-weight: bold;
+    margin-left: 20px;
+    color: #2c3e50;
 }
 
 .book-container {
@@ -41,7 +46,6 @@ select, button {
     width: 200px;
     text-align: center;
     transition: transform 0.3s, box-shadow 0.3s;
-    animation: slideUp 0.5s ease-in-out;
 }
 
 .book:hover {
@@ -63,20 +67,8 @@ select, button {
 .book h2 {
     font-size: 1.2em;
     margin: 10px 0;
-    animation: fadeIn 1s ease-in-out;
 }
 
 .book p {
     margin: 5px 0;
-    animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { transform: translateY(20px); }
-    to { transform: translateY(0); }
 }
